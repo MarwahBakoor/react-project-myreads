@@ -3,7 +3,8 @@ import CurrentlyReading from './CurrentReading';
 import WantToRead from './WantToRead';
 import Read from './Read';
 import OpenSearch from './OpenSearch';
-import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI';
+import Book from './Book';
 class ListBooks extends Component {
 
   constructor(props) {
@@ -39,12 +40,26 @@ class ListBooks extends Component {
 
   }
   
-
-  componentDidMount() {
+  getAllBooks() {
     BooksAPI.getAll()
     .then((books)=>{
       this.filterMyBooks(books)
     })
+  }
+
+  updateBookshelfHandelr = (book, shelf)=>{
+    BooksAPI.update(book,shelf); 
+    const oldShelf = book.shelf
+    const removeBook = this.state[book.shelf].filter((b)=> b.id !== book.id );
+    this.setState((preveiceState)=>({
+      [oldShelf]:removeBook,
+      [shelf] : [...preveiceState[shelf],book]
+      })) 
+  book.shelf = shelf;
+    }
+  componentDidMount() {
+    
+    this.getAllBooks()
     
   }
 
@@ -56,9 +71,9 @@ class ListBooks extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <CurrentlyReading books={this.state.currentlyReading} />
-                <WantToRead books={this.state.wantToRead} />
-                <Read books={this.state.read} /> 
+                <CurrentlyReading books={this.state.currentlyReading} updateBookshelf ={this.updateBookshelfHandelr} />
+                <WantToRead books={this.state.wantToRead}  updateBookshelf ={this.updateBookshelfHandelr} />
+                <Read books={this.state.read} updateBookshelf ={this.updateBookshelfHandelr} /> 
               </div>
 
               <OpenSearch />

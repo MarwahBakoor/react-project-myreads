@@ -10,7 +10,11 @@ class Read extends Component {
                   <h2 className="bookshelf-title">Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                   { readBooks.map((BookObject)=>( <Book BookObject = {BookObject} key={BookObject.id} /> )) }
+                   { readBooks.map((BookObject)=>( 
+
+                   <Book BookObject = {BookObject} key={BookObject.id} updateBookshelf ={this.props.updateBookshelf} /> 
+                   
+                   )) }
                     </ol>
                   </div>
                 </div>

@@ -9,7 +9,9 @@ class WantToRead extends Component {
                   <h2 className="bookshelf-title">Want to Read</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      { WToRbooks.map((BookObject)=>( <Book BookObject = {BookObject} key={BookObject.id} /> ))}
+                      { WToRbooks.map((BookObject)=>( 
+                      <Book BookObject = {BookObject} key={BookObject.id} updateBookshelf ={this.props.updateBookshelf} />
+                       ))}
                     </ol>
                   </div>
                 </div>

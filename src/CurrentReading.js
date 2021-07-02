@@ -9,10 +9,14 @@ class CurrentlyReading extends Component {
                   <h2 className="bookshelf-title">Currently Reading</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
-                      {CRBooks.map((BookObject)=>( <Book BookObject = {BookObject} key={BookObject.id} /> ))}
+                      {CRBooks.map((BookObject)=>( 
+                      <Book BookObject = {BookObject} key={BookObject.id} updateBookshelf ={this.props.updateBookshelf} /> 
+                      
+                      ))}
                     </ol>
                   </div>
-                </div>
+            </div>
+
         )
     }
 }
