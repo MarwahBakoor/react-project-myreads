@@ -4,7 +4,7 @@ import WantToRead from './WantToRead';
 import Read from './Read';
 import OpenSearch from './OpenSearch';
 import * as BooksAPI from './BooksAPI';
-import Book from './Book';
+
 class ListBooks extends Component {
 
   constructor(props) {
