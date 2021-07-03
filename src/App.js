@@ -8,46 +8,71 @@ import {Route} from 'react-router-dom';
 
 class BooksApp extends React.Component {
   state = { 
-    myBooks : [],
+    myBooks : [], 
     currentlyReading : [],
     wantToRead : [],
     read: []
   }
 
 
-  componentDidMount() {
-    
-    this.getAllBooks()
-    
+componentDidMount() {
+   // Runs after the first render() lifecycle
+    this.getAllBooks()   
   }
 
-  filterMyBooks = (allBooks) =>{
-    allBooks.filter((b)=>{
+getAllBooks() {
+    BooksAPI.getAll() // get all My Book List
+    .then((books)=>{
+      this.setState((Previcestste) => ({
+        myBooks: books // add my book list state
+      }))
+      this.filterMyBooks(books) // Calling filter method
+    })
+  }
+
+  filterMyBooks = (myBookList) =>{
+    // filter books in three categories {currentlyReading, wantToRead, read}
+    myBookList.filter((b)=>{ 
           this.setState((Previcestste) => ({
-            myBooks: allBooks,
-           [b.shelf]: [...Previcestste[b.shelf], b ]
+           [b.shelf]: [...Previcestste[b.shelf], b ] 
           }))
     })
   }
 
 
   updateBookshelfHandelr = (book, shelf)=>{
-    BooksAPI.update(book,shelf); 
-    const oldShelf = book.shelf
-    const removeBook = this.state[book.shelf]? this.state[book.shelf].filter((b)=> b.id !== book.id ) : null;
-    this.setState((preveiceState)=>({
-      [oldShelf]:removeBook,
-      [shelf] : [...preveiceState[shelf],book]
-      })) 
+    // Change the book shelf 
+    BooksAPI.update(book,shelf).then(() => {
+      // Updae the clint side
+      if(book.shelf && book.shelf !== "none"){
+        //Check if book have shelf befor reomving it from state shelf
+        this.removeBookFromShelf(book)
+      }
+      if(shelf !== "none"){
+        //Check if book moving to one of the shelf that in the main page
+        this.addBookToShelf(shelf,book)
+      }
+      // update the shelf in the object
       book.shelf = shelf;
+    })
     }
 
-  getAllBooks() {
-    BooksAPI.getAll()
-    .then((books)=>{
-      this.filterMyBooks(books)
-    })
-  }
+    removeBookFromShelf = ( oldBook )=>{
+      // remove the book from old shelf
+      const removeBook = this.state[oldBook.shelf].filter((b)=> b.id !== oldBook.id );
+      this.setState((preveiceState) =>({
+        [oldBook.shelf]:removeBook
+      }))
+    }
+
+    addBookToShelf =(newShelf,book) =>{
+      // add the book to new shelf
+      this.setState((preveiceState)=>({
+        [newShelf] : [...preveiceState[newShelf], book]
+      }))
+    }
+
+  
 
 
   render() {

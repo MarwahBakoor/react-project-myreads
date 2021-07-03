@@ -26,14 +26,14 @@ class Search extends Component {
       .then((booksList) => {
         if(booksList && booksList.error !== "empty query"){
           booksList = this.AddingshelfToMybooks(booksList)
-          this.setState({books: booksList })
+          this.setState(prevState =>({books: booksList }))
         } else {
-          this.setState({books:[]})
+          this.setState(prevState =>({books:[]}))
         }
       })
     } else {
     console.log('here')
-    this.setState({books:[]})
+    this.setState(prevState =>({books:[]}))
   }
   }
 

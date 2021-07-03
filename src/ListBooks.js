@@ -1,18 +1,10 @@
-import React, {Component} from 'react';
-import CurrentlyReading from './CurrentReading';
-import WantToRead from './WantToRead';
-import Read from './Read';
+import React from 'react';
+import Shelf from './Shelfs';
 import OpenSearch from './OpenSearch';
-import * as BooksAPI from './BooksAPI';
 
-class ListBooks extends Component {
-
-  
-  
-
-    render(){
-      const myBooks = this.props.myBooks;
-      const  updateBookshelfHandelr = this.props.updateBookshelfHandelr;
+function ListBooks(props) {
+      const myBooks = props.myBooks;
+      const  updateBookshelfHandelr = props.updateBookshelfHandelr;
         return(
             <div className="list-books">
             <div className="list-books-title">
@@ -20,9 +12,18 @@ class ListBooks extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <CurrentlyReading books={ myBooks.currentlyReading} updateBookshelf ={updateBookshelfHandelr} />
-                <WantToRead books={ myBooks.wantToRead}  updateBookshelf ={updateBookshelfHandelr} />
-                <Read books={myBooks.read} updateBookshelf ={updateBookshelfHandelr} /> 
+                  <div className="bookshelf">
+                      <h2 className="bookshelf-title">Currently Reading</h2>
+                      <Shelf books={myBooks.currentlyReading} updateBookshelf ={updateBookshelfHandelr} />
+                    </div>
+                    <div className="bookshelf">
+                          <h2 className="bookshelf-title">Want to Read</h2>
+                          <Shelf books={ myBooks.wantToRead} updateBookshelf ={updateBookshelfHandelr} />
+                    </div>
+                    <div className="bookshelf">
+                          <h2 className="bookshelf-title">Read</h2>
+                          <Shelf books={myBooks.read} updateBookshelf ={updateBookshelfHandelr} />
+                    </div>
               </div>
 
               <OpenSearch />
@@ -33,6 +34,5 @@ class ListBooks extends Component {
         )
     }
 
-}
 
 export default ListBooks;

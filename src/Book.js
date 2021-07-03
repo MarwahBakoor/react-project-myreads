@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
 
-
 class Book extends Component {
     state ={
-      select: this.props.BookObject.shelf
+      select: this.props.BookObject.shelf // the selected shelf
     }
 
     onChangeEvent = (event) =>{
-      this.props.updateBookshelf(this.props.BookObject,event.target.value);
-      
+      this.props.updateBookshelf(this.props.BookObject,event.target.value);    
     }
 
     render(){

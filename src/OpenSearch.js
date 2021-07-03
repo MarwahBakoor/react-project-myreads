@@ -1,8 +1,7 @@
-import React, { Component } from "react";
-import {Link} from 'react-router-dom';
+import React from "react";
+import { Link } from 'react-router-dom';
 
-class OpenSearch extends Component {
-        render(){
+function OpenSearch() {
             return(
                 <div className="open-search">
                     <Link to ={{pathname: "/search"}}>
@@ -11,6 +10,5 @@ class OpenSearch extends Component {
                 </div>
             )
         }
-}
 
 export default OpenSearch;
