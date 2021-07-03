@@ -2,26 +2,60 @@ import React from 'react';
 import Search from './Search';
 import ListBooks from './ListBooks';
 import './App.css';
-
+import * as BooksAPI from './BooksAPI';
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: true
+  state = { 
+    myBooks : [],
+    currentlyReading : [],
+    wantToRead : [],
+    read: [],
+    showSearchPage: false
   }
+
+
+  componentDidMount() {
+    
+    this.getAllBooks()
+    
+  }
+
+  filterMyBooks = (allBooks) =>{
+    allBooks.filter((b)=>{
+          this.setState((Previcestste) => ({
+            myBooks: allBooks,
+           [b.shelf]: [...Previcestste[b.shelf], b ]
+          }))
+    })
+  }
+
+
+  updateBookshelfHandelr = (book, shelf)=>{
+    BooksAPI.update(book,shelf); 
+    const oldShelf = book.shelf
+    const removeBook = this.state[book.shelf]? this.state[book.shelf].filter((b)=> b.id !== book.id ) : null;
+    this.setState((preveiceState)=>({
+      [oldShelf]:removeBook,
+      [shelf] : [...preveiceState[shelf],book]
+      })) 
+      book.shelf = shelf;
+    }
+
+  getAllBooks() {
+    BooksAPI.getAll()
+    .then((books)=>{
+      this.filterMyBooks(books)
+    })
+  }
+
 
   render() {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <Search />
+          <Search myBooks={this.state.myBooks} updateBookshelfHandelr ={this.updateBookshelfHandelr}  />
         ) : (
-          <ListBooks />
+          <ListBooks myBooks={this.state}  updateBookshelfHandelr ={this.updateBookshelfHandelr} />
         )}
       </div>
     )

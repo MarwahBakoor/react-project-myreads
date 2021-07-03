@@ -12,33 +12,44 @@ class Search extends Component {
 
   handleSubmit = (event) =>{
     event.preventDefault();
-    
+  }
+
+  AddingshelfToMybooks =(allBooks) =>{
+    const myBooks = this.props.myBooks
+    return allBooks.map(ab => myBooks.find(mb => mb.id === ab.id ) || ab )
+  }
+  
+  fetchBooks = () =>{
+    const query = this.state.query;
+    this.setState(prevState =>({...prevState, query}));
+    if(query !== ''){
+      BooksAPI.search(query)
+      .then((booksList) => {
+        if(booksList && booksList.error !== "empty query"){
+          booksList = this.AddingshelfToMybooks(booksList)
+          this.setState({books: booksList })
+        } else {
+          this.setState({books:[]})
+        }
+      })
+    } else {
+    console.log('here')
+    this.setState({books:[]})
+  }
   }
 
   handleChange = (event) =>{
     this.setState({
-      value:event.target.value
+      query:event.target.value
     })
-    const query = event.target.value;
-    this.setState(prevState =>({...prevState, query}));
-    if(query !== ''){
-    BooksAPI.search(query)
-    .then((booksList) => {
-      if(booksList.error !== "empty query"){
-        this.setState({books: booksList })
-      } else {
-        this.setState({books:[]})
-      }
-    })
-  } else {
-    console.log('here')
-    this.setState({books:[]})
-  }
-
+    setTimeout(()=>{
+      this.fetchBooks()
+    }, 800)
   }
 
 
     render(){
+      const  updateBookshelfHandelr = this.props.updateBookshelfHandelr;
 
         return(
             <div className="search-books">
@@ -60,7 +71,7 @@ class Search extends Component {
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {this.state.books.map(b => <Book BookObject={b} key={b.id} />)}
+                {this.state.books.map(b => <Book BookObject={b} key={b.id} updateBookshelf ={updateBookshelfHandelr} />)}
               </ol>
             </div>
           </div>

@@ -7,63 +7,12 @@ import * as BooksAPI from './BooksAPI';
 
 class ListBooks extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      currentlyReading : [],
-      wantToRead : [],
-      read: []
-    }
-  }
-
-  filterMyBooks = (books) =>{
-    books.filter((book)=>{
-      switch(book.shelf) {
-        case "currentlyReading":
-          this.setState((books) => ({
-           currentlyReading: [...books.currentlyReading, book ]
-          }))
-          break;
-        case "wantToRead":
-          this.setState((books) => ({
-            wantToRead: [...books.wantToRead, book ]
-          }))
-          break;
-        default:
-
-          this.setState((books) => ({
-            read: [...books.read, book ]
-          }))
-      }
-
-    })
-
-  }
   
-  getAllBooks() {
-    BooksAPI.getAll()
-    .then((books)=>{
-      this.filterMyBooks(books)
-    })
-  }
-
-  updateBookshelfHandelr = (book, shelf)=>{
-    BooksAPI.update(book,shelf); 
-    const oldShelf = book.shelf
-    const removeBook = this.state[book.shelf].filter((b)=> b.id !== book.id );
-    this.setState((preveiceState)=>({
-      [oldShelf]:removeBook,
-      [shelf] : [...preveiceState[shelf],book]
-      })) 
-  book.shelf = shelf;
-    }
-  componentDidMount() {
-    
-    this.getAllBooks()
-    
-  }
+  
 
     render(){
+      const myBooks = this.props.myBooks;
+      const  updateBookshelfHandelr = this.props.updateBookshelfHandelr;
         return(
             <div className="list-books">
             <div className="list-books-title">
@@ -71,9 +20,9 @@ class ListBooks extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <CurrentlyReading books={this.state.currentlyReading} updateBookshelf ={this.updateBookshelfHandelr} />
-                <WantToRead books={this.state.wantToRead}  updateBookshelf ={this.updateBookshelfHandelr} />
-                <Read books={this.state.read} updateBookshelf ={this.updateBookshelfHandelr} /> 
+                <CurrentlyReading books={ myBooks.currentlyReading} updateBookshelf ={updateBookshelfHandelr} />
+                <WantToRead books={ myBooks.wantToRead}  updateBookshelf ={updateBookshelfHandelr} />
+                <Read books={myBooks.read} updateBookshelf ={updateBookshelfHandelr} /> 
               </div>
 
               <OpenSearch />
